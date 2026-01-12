@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مطعم ومطبخ العائلة - بروست عائلي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* تنسيقات الصور في HTML */
+        .meal-img img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        /* خلفية القسم الرئيسي */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
+            background-size: cover;
+            background-position: center;
+        }
+        
+        /* تنسيق الشعار */
+        .logo-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-color);
+            margin-left: 10px;
+        }
+        
+        /* شارة التوصيل */
+        .delivery-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* أيقونات التواصل */
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-3px);
+        }
+        
+        .social-icon.facebook {
+            background-color: #1877F2;
+        }
+        
+        .social-icon.whatsapp {
+            background-color: #25D366;
+        }
+        
+        .footer-text {
+            text-align: center;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <!-- ترويسة الموقع -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="images/ss.png" alt="شعار مطعم ومطبخ العائلة" class="logo-img">
+                    <div>
+                        <h1>مطعم ومطبخ العائلة</h1>
+                      
+                      
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="contact-info">
+                        <p><i class="fas fa-phone"></i> للتواصل: +972595707901</p>
+                    </div>
+                    <div class="cart-icon-container">
+                        <button id="cart-toggle" class="cart-toggle">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span id="cart-count" class="cart-count">0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- سلة المشتريات -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> سلة الطلبات</h3>
+            <button id="close-cart" class="close-cart">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <!-- سيتم إضافة العناصر هنا ديناميكياً -->
+            <div class="empty-cart-message" id="empty-cart-message">
+                <i class="fas fa-shopping-basket"></i>
+                <p>سلة الطلبات فارغة</p>
+                <p>أضف وجبات من القائمة</p>
+            </div>
+        </div>
+        <div class="cart-summary">
+            <div class="cart-total">
+                <span>المجموع:</span>
+                <span id="cart-total-price">0 شيكل</span>
+            </div>
+            <button id="checkout-btn" class="checkout-btn">
+                <i class="fab fa-whatsapp"></i> إتمام الطلب عبر واتساب
+            </button>
+            <button id="clear-cart" class="clear-cart-btn">
+                <i class="fas fa-trash"></i> تفريغ السلة
+            </button>
+        </div>
+    </div>
+    <div id="cart-overlay" class="cart-overlay"></div>
+
+    <!-- قسم البطل -->
+    <section class="hero">
+        <div class="container">
+            <h2>أطيب الوجبات العائلية والشهية</h2>
+            <p>استمتع بتجربة فريدة من ألذ وجبات البروست المعدة بعناية وتقديم مميز يناسب جميع أفراد العائلة.</p>
+            <p>نقدم لكم تشكيلة متنوعة من الوجبات العائلية والفردية بأفضل الأسعار.</p>
+            <div class="delivery-badge" style="margin-top: 20px; font-size: 1rem; padding: 10px 20px;">
+                <i class="fas fa-motorcycle"></i>
+                <span>خدمة التوصيل متوفرة لجميع المناطق</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- وجبات البروست العائلية -->
+    <div class="container">
+        <h2 class="section-title">وجبات البروست العائلية</h2>
+        <div class="menu-grid">
+            <!-- وجبة عائلية 1 -->
+            <div class="meal-card family-meal">
+                <div class="meal-img">
+                    <img src="images/family-meal-1.png" alt="وجبة بروست عائلية 12 قطعة">
+                </div>
+                <div class="meal-content">
+                    <h3 class="meal-title">وجبة بروست عائلية (12 قطعة)</h3>
+                    <div class="meal-price">100 شيكل</div>
+                    <p class="meal-description">وجبة دسمة تناسب العائلة، تتكون من 12 قطعة بروست مع الخضار والبطاطا والمشروبات.</p>
+                    <ul class="meal-ingredients">
+                        <li><i class="fas fa-check"></i> 12 قطعة بروست</li>
+                        <li><i class="fas fa-check"></i> بطاطا مقلية</li>
+                        <li><i class="fas fa-check"></i> مشروب كولا</li>
+                        <li><i class="fas fa-check"></i> سلطة كوسلو</li>
+                        <li><i class="fas fa-check"></i> صلصة مثومة</li>
+                        <li><i class="fas fa-check"></i> خبز طازج</li>
+                    </ul>
+                    <div class="quantity-controls">
+                        <div class="quantity-selector">
+                            <button class="quantity-btn minus" data-meal="meal1">-</button>
+                            <span class="quantity-value" id="quantity-meal1">1</span>
+                            <button class="quantity-btn plus" data-meal="meal1">+</button>
+                        </div>
+                        <button class="add-to-cart" data-meal="meal1" data-name="وجبة بروست عائلية (12 قطعة)" data-price="100">أضف إلى السلة</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- وجبة عائلية 2 -->
+            <div class="meal-card family-meal">
+                <div class="meal-img">
+                    <img src="images/family-meal-2.jpeg" alt="وجبة بروست عائلية 14 قطعة">
+                </div>
+                <div class="meal-content">
+                    <h3 class="meal-title">وجبة بروست عائلية (14 قطعة)</h3>
+                    <div class="meal-price">110 شيكل</div>
+                    <p class="meal-description">وجبة عائلية أكبر، تتكون من 14 قطعة بروست مع الخضار والبطاطا والمشروبات.</p>
+                    <ul class="meal-ingredients">
+                        <li><i class="fas fa-check"></i> 14 قطعة بروست</li>
+                        <li><i class="fas fa-check"></i> بطاطا مقلية</li>
+                        <li><i class="fas fa-check"></i> مشروب كولا</li>
+                        <li><i class="fas fa-check"></i> سلطة كوسلو</li>
+                        <li><i class="fas fa-check"></i> صلصة مثومة</li>
+                        <li><i class="fas fa-check"></i> خبز طازج</li>
+                    </ul>
+                    <div class="quantity-controls">
+                        <div class="quantity-selector">
+                            <button class="quantity-btn minus" data-meal="meal2">-</button>
+                            <span class="quantity-value" id="quantity-meal2">1</span>
+                            <button class="quantity-btn plus" data-meal="meal2">+</button>
+                        </div>
+                        <button class="add-to-cart" data-meal="meal2" data-name="وجبة بروست عائلية (14 قطعة)" data-price="110">أضف إلى السلة</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- وجبة عائلية 3 -->
+            <div class="meal-card family-meal">
+                <div class="meal-img">
+                    <img src="images/family-meal-3.jpeg" alt="وجبة بروست مشكل 10 قطع">
+                </div>
+                <div class="meal-content">
+                    <h3 class="meal-title">وجبة بروست مشكل (10 قطع)</h3>
+                    <div class="meal-price">85 شيكل</div>
+                    <p class="meal-description">وجبة متنوعة من 10 قطع بروست مشكل مع الخضار والبطاطا والمشروبات.</p>
+                    <ul class="meal-ingredients">
+                        <li><i class="fas fa-check"></i> 10 قطع بروست مشكل</li>
+                        <li><i class="fas fa-check"></i> بطاطا مقلية</li>
+                        <li><i class="fas fa-check"></i> مشروب كولا</li>
+                        <li><i class="fas fa-check"></i> سلطة كوسلو</li>
+                        <li><i class="fas fa-check"></i> صلصة مثومة</li>
+                        <li><i class="fas fa-check"></i> خبز طازج</li>
+                    </ul>
+                    <div class="quantity-controls">
+                        <div class="quantity-selector">
+                            <button class="quantity-btn minus" data-meal="meal3">-</button>
+                            <span class="quantity-value" id="quantity-meal3">1</span>
+                            <button class="quantity-btn plus" data-meal="meal3">+</button>
+                        </div>
+                        <button class="add-to-cart" data-meal="meal3" data-name="وجبة بروست مشكل (10 قطع)" data-price="85">أضف إلى السلة</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- وجبات البروست الفردية -->
+        <h2 class="section-title">وجبات البروست الفردية</h2>
+        <div class="menu-grid">
+            <!-- وجبة فردية 1 -->
+            <div class="meal-card individual-meal">
+                <div class="meal-img">
+                    <img src="images/family-meal-4.jpeg" alt="وجبة بروست قطعتين">
+                </div>
+                <div class="meal-content">
+                    <h3 class="meal-title">وجبة بروست قطعتين اختياري</h3>
+                    <div class="meal-price">20 شيكل</div>
+                    <p class="meal-description">وجبة فردية تتكون من قطعتين بروست اختياري مع الخبز والمشروب والصلصات.</p>
+                    <ul class="meal-ingredients">
+                        <li><i class="fas fa-check"></i> قطعتين بروست اختياري</li>
+                        <li><i class="fas fa-check"></i> مشروب كولا</li>
+                        <li><i class="fas fa-check"></i> خبز طازج</li>
+                        <li><i class="fas fa-check"></i> صلصة مثومة</li>
+                        <li><i class="fas fa-check"></i> سلطة كوسلو</li>
+                    </ul>
+                    <div class="quantity-controls">
+                        <div class="quantity-selector">
+                            <button class="quantity-btn minus" data-meal="meal4">-</button>
+                            <span class="quantity-value" id="quantity-meal4">1</span>
+                            <button class="quantity-btn plus" data-meal="meal4">+</button>
+                        </div>
+                        <button class="add-to-cart" data-meal="meal4" data-name="وجبة بروست قطعتين اختياري" data-price="20">أضف إلى السلة</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- وجبة فردية 2 -->
+            <div class="meal-card individual-meal">
+                <div class="meal-img">
+                    <img src="images/family-meal-5.jpg" alt="وجبة بروست ثلاث قطع">
+                </div>
+                <div class="meal-content">
+                    <h3 class="meal-title">وجبة بروست ثلاث قطع اختياري</h3>
+                    <div class="meal-price">25 شيكل</div>
+                    <p class="meal-description">وجبة فردية تتكون من ثلاث قطع بروست اختياري مع الخبز والمشروب والصلصات.</p>
+                    <ul class="meal-ingredients">
+                        <li><i class="fas fa-check"></i> ثلاث قطع بروست اختياري</li>
+                        <li><i class="fas fa-check"></i> مشروب كولا</li>
+                        <li><i class="fas fa-check"></i> سلطة كوسلو</li>
+                        <li><i class="fas fa-check"></i> صلصة مثومة</li>
+                    </ul>
+                    <div class="quantity-controls">
+                        <div class="quantity-selector">
+                            <button class="quantity-btn minus" data-meal="meal5">-</button>
+                            <span class="quantity-value" id="quantity-meal5">1</span>
+                            <button class="quantity-btn plus" data-meal="meal5">+</button>
+                        </div>
+                        <button class="add-to-cart" data-meal="meal5" data-name="وجبة بروست ثلاث قطع اختياري" data-price="25">أضف إلى السلة</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- وجبة فردية 3 -->
+            <div class="meal-card individual-meal">
+                <div class="meal-img">
+                    <img src="images/family-meal-6.jpeg" alt="كريسبي مسحب خمس قطع">
+                </div>
+                <div class="meal-content">
+                    <h3 class="meal-title">كريسبي مسحب خمس قطع</h3>
+                    <div class="meal-price">25 شيكل</div>
+                    <p class="meal-description">وجبة كريسبي مسحب خمس قطع مع الخبز والمشروب والصلصات.</p>
+                    <ul class="meal-ingredients">
+                        <li><i class="fas fa-check"></i> خمس قطع كريسبي مسحب</li>
+                        <li><i class="fas fa-check"></i> مشروب كولا</li>
+                        <li><i class="fas fa-check"></i> خبز طازج</li>
+                        <li><i class="fas fa-check"></i> سلطة كوسلو</li>
+                        <li><i class="fas fa-check"></i> صلصة مثومة</li>
+                    </ul>
+                    <div class="quantity-controls">
+                        <div class="quantity-selector">
+                            <button class="quantity-btn minus" data-meal="meal6">-</button>
+                            <span class="quantity-value" id="quantity-meal6">1</span>
+                            <button class="quantity-btn plus" data-meal="meal6">+</button>
+                        </div>
+                        <button class="add-to-cart" data-meal="meal6" data-name="كريسبي مسحب خمس قطع" data-price="25">أضف إلى السلة</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- وجبة فردية 4 -->
+            <div class="meal-card individual-meal">
+                <div class="meal-img">
+                    <img src="images/family-meal-7.jpeg" alt="جنحان 12 قطعة">
+                </div>
+                <div class="meal-content">
+                    <h3 class="meal-title">جنحان 12 قطعة</h3>
+                    <div class="meal-price">25 شيكل</div>
+                    <p class="meal-description">وجبة جنحان 12 قطعة مع الخبز والمشروب وصلصة خاصة.</p>
+                    <ul class="meal-ingredients">
+                        <li><i class="fas fa-check"></i> 12 قطعة جنحان</li>
+                        <li><i class="fas fa-check"></i> مشروب كولا</li>
+                        <li><i class="fas fa-check"></i> خبز طازج</li>
+                        <li><i class="fas fa-check"></i> صوص سويت تشيلي باربكيو</li>
+                    </ul>
+                    <div class="quantity-controls">
+                        <div class="quantity-selector">
+                            <button class="quantity-btn minus" data-meal="meal7">-</button>
+                            <span class="quantity-value" id="quantity-meal7">1</span>
+                            <button class="quantity-btn plus" data-meal="meal7">+</button>
+                        </div>
+                        <button class="add-to-cart" data-meal="meal7" data-name="جنحان 12 قطعة" data-price="25">أضف إلى السلة</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- زر الواتساب -->
+    <a href="https://wa.me/972595707901?text=مرحباً، أريد طلب وجبة من 'مطعم ومطبخ العائلة'" class="whatsapp-btn" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- تذييل الصفحة -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <div class="footer-section">
+                        <h3 id="ff">مطعم ومطبخ العائلة</h3>
+                        <div class="footer-text">
+                            <p>العنوان: تلفيت-أول البلد-بجانب صالة علاء الدين</p>
+                            <p>هاتف: +972595707901</p>
+                            <p>أوقات العمل: يومياً من 10 صباحاً حتى 12 منتصف الليل</p>
+                            <p>خدمة التوصيل متوفرة لجميع المناطق</p>
+                            <p>الشيف: كمال شاهين</p>
+                            
+                            <div class="social-icons">
+                                <a href="https://www.facebook.com/share/14VPqVYrEho/" class="social-icon facebook" target="_blank">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="https://wa.me/972595707901" class="social-icon whatsapp" target="_blank">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="copyright">
+                    <p>© مطعم ومطبخ العائلة. جميع الحقوق محفوظة.</p>
+                    <p class="developer">تم التصميم والتطوير بواسطة: جواد شاهين</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
