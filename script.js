@@ -1,5 +1,7 @@
 // إدارة سلة المشتريات
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
+let deliveryEnabled = localStorage.getItem('deliveryEnabled') === 'true';
+let deliveryAddress = localStorage.getItem('deliveryAddress') || '';
 
 // عناصر DOM
 const cartToggle = document.getElementById('cart-toggle');
@@ -12,6 +14,71 @@ const cartTotalPrice = document.getElementById('cart-total-price');
 const checkoutBtn = document.getElementById('checkout-btn');
 const clearCartBtn = document.getElementById('clear-cart');
 const emptyCartMessage = document.getElementById('empty-cart-message');
+
+// عناصر التوصيل الجديدة
+const deliveryOption = document.getElementById('delivery-option');
+const deliveryToggle = document.getElementById('delivery-toggle');
+const deliveryDetails = document.getElementById('delivery-details');
+const deliveryAddressInput = document.getElementById('delivery-address');
+const addressRequired = document.getElementById('address-required');
+const deliveryTotal = document.getElementById('delivery-total');
+const deliveryPrice = document.getElementById('delivery-price');
+const finalTotal = document.getElementById('final-total');
+const finalTotalPrice = document.getElementById('final-total-price');
+
+// تهيئة خيار التوصيل
+function initializeDeliveryOption() {
+    if (deliveryEnabled) {
+        deliveryOption.classList.add('active');
+        deliveryDetails.classList.add('show');
+        deliveryAddressInput.value = deliveryAddress;
+    }
+    updateDeliveryDisplay();
+}
+
+// تحديث عرض خيار التوصيل
+function updateDeliveryDisplay() {
+    if (deliveryEnabled) {
+        deliveryTotal.style.display = 'flex';
+        finalTotal.style.display = 'flex';
+        
+        const cartTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+        const finalTotalValue = cartTotal + 5;
+        
+        finalTotalPrice.textContent = `${finalTotalValue} شيكل`;
+    } else {
+        deliveryTotal.style.display = 'none';
+        finalTotal.style.display = 'none';
+    }
+}
+
+// التحكم في خيار التوصيل
+deliveryToggle.addEventListener('click', function() {
+    deliveryEnabled = !deliveryEnabled;
+    
+    if (deliveryEnabled) {
+        deliveryOption.classList.add('active');
+        deliveryDetails.classList.add('show');
+    } else {
+        deliveryOption.classList.remove('active');
+        deliveryDetails.classList.remove('show');
+        addressRequired.style.display = 'none';
+    }
+    
+    // حفظ الإعدادات
+    localStorage.setItem('deliveryEnabled', deliveryEnabled);
+    deliveryAddress = deliveryAddressInput.value.trim();
+    localStorage.setItem('deliveryAddress', deliveryAddress);
+    
+    updateDeliveryDisplay();
+    updateCartDisplay();
+});
+
+// تحديث العنوان عند الكتابة
+deliveryAddressInput.addEventListener('input', function() {
+    deliveryAddress = this.value.trim();
+    localStorage.setItem('deliveryAddress', deliveryAddress);
+});
 
 // التحكم في أزرار زيادة ونقصان الكمية للوجبات
 document.querySelectorAll('.quantity-btn').forEach(button => {
@@ -100,6 +167,9 @@ function updateCartDisplay() {
     const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
     cartTotalPrice.textContent = `${totalPrice} شيكل`;
     
+    // تحديث خيار التوصيل
+    updateDeliveryDisplay();
+    
     // تحديث عرض عناصر السلة
     renderCartItems();
 }
@@ -112,12 +182,14 @@ function renderCartItems() {
         cartItems.appendChild(emptyCartMessage);
         checkoutBtn.disabled = true;
         clearCartBtn.disabled = true;
+        deliveryOption.style.display = 'none';
         return;
     }
     
     emptyCartMessage.style.display = 'none';
     checkoutBtn.disabled = false;
     clearCartBtn.disabled = false;
+    deliveryOption.style.display = 'block';
     
     let cartHTML = '';
     
@@ -207,8 +279,20 @@ function showNotification(message) {
 checkoutBtn.addEventListener('click', function() {
     if (cart.length === 0) return;
     
+    // التحقق من العنوان إذا كان التوصيل مفعلاً
+    if (deliveryEnabled) {
+        const address = deliveryAddressInput.value.trim();
+        if (!address) {
+            addressRequired.style.display = 'block';
+            deliveryAddressInput.focus();
+            showNotification('يرجى إدخال العنوان للتوصيل');
+            return;
+        }
+        addressRequired.style.display = 'none';
+    }
+    
     let message = `مرحباً، أريد طلب من "مطعم ومطبخ العائلة":%0A%0A`;
-    message += `العنوان: تلفيت-أول البلد-بجانب صالة علاء الدين%0A%0A`;
+  
     message += `تفاصيل الطلب:%0A`;
     
     cart.forEach((item, index) => {
@@ -218,10 +302,22 @@ checkoutBtn.addEventListener('click', function() {
     });
     
     const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-    message += `المجموع الكلي: ${totalPrice} شيكل%0A%0A`;
+    message += `المجموع: ${totalPrice} شيكل%0A`;
+    
+    // إضافة سعر التوصيل إذا كان مفعلاً
+    if (deliveryEnabled) {
+        message += `سعر التوصيل: 5 شيكل%0A`;
+        const finalTotal = totalPrice + 5;
+        message += `الإجمالي النهائي: ${finalTotal} شيكل%0A%0A`;
+        message += `عنوان التوصيل: ${deliveryAddressInput.value}%0A%0A`;
+    } else {
+        message += `الإجمالي النهائي: ${totalPrice} شيكل%0A%0A`;
+    }
+    
     message += `أرجو التواصل معي لتأكيد الطلب.`;
     
-    window.open(`https://wa.me/972595707901?text=${message}`, '_blank');
+    // تغيير رقم واتساب إلى الرقم الجديد
+    window.open(`https://wa.me/970595170185?text=${message}`, '_blank');
 });
 
 // تفريغ السلة
@@ -230,7 +326,12 @@ clearCartBtn.addEventListener('click', function() {
     
     if (confirm('هل أنت متأكد من تفريغ السلة؟')) {
         cart = [];
+        deliveryEnabled = false;
+        deliveryAddress = '';
+        localStorage.setItem('deliveryEnabled', false);
+        localStorage.setItem('deliveryAddress', '');
         saveCart();
+        initializeDeliveryOption();
         updateCartDisplay();
         showNotification('تم تفريغ السلة');
     }
@@ -271,6 +372,9 @@ window.addEventListener('scroll', function() {
 document.addEventListener('DOMContentLoaded', function() {
     // تحديث عرض السلة عند تحميل الصفحة
     updateCartDisplay();
+    
+    // تهيئة خيار التوصيل
+    initializeDeliveryOption();
     
     // تأثيرات ظهور البطاقات
     const mealCards = document.querySelectorAll('.meal-card');

@@ -4,23 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مطعم ومطبخ العائلة - بروست عائلي</title>
-   <link rel="icon" type="image/png" href="images/ss.png">
+    <link rel="icon" type="image/png" href="images/ss.png">
 
+    <!-- Link Preview -->
+    <meta property="og:title" content="مطبخ العائلة" />
+    <meta property="og:description" content="أشهى المأكولات البيتية – اطلب الآن بسهولة" />
+    <meta property="og:image" content="https://meek-peony-b721d7.netlify.app/images/ss.png" />
+    <meta property="og:url" content="https://meek-peony-b721d7.netlify.app/" />
+    <meta property="og:type" content="website" />
 
-            <!-- Link Preview -->
-<meta property="og:title" content="مطبخ العائلة" />
-<meta property="og:description" content="أشهى المأكولات البيتية – اطلب الآن بسهولة" />
-<meta property="og:image" content="https://meek-peony-b721d7.netlify.app/images/ss.png" />
-<meta property="og:url" content="https://meek-peony-b721d7.netlify.app/" />
-<meta property="og:type" content="website" />
-
-<!-- Twitter / WhatsApp support -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="مطبخ العائلة" />
-<meta name="twitter:description" content="أشهى المأكولات البيتية – اطلب الآن بسهولة" />
-<meta name="twitter:image" content="https://meek-peony-b721d7.netlify.app/images/ss.png" />
-
-
+    <!-- Twitter / WhatsApp support -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="مطبخ العائلة" />
+    <meta name="twitter:description" content="أشهى المأكولات البيتية – اطلب الآن بسهولة" />
+    <meta name="twitter:image" content="https://meek-peony-b721d7.netlify.app/images/ss.png" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,11 +33,12 @@
             display: block;
         }
         
-        /* خلفية القسم الرئيسي */
+        /* خلفية القسم الرئيسي - تم التعديل هنا */
         .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/big.jpeg');
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
         }
         
         /* تنسيق الشعار */
@@ -108,6 +106,74 @@
             text-align: center;
             line-height: 1.8;
         }
+        
+        /* قسم خيار التوصيل */
+        .delivery-option {
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .delivery-option.active {
+            border-color: #25D366;
+            background-color: #f0fff4;
+        }
+        
+        .delivery-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        
+        .delivery-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .delivery-price {
+            color: #25D366;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .delivery-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .delivery-details.show {
+            max-height: 200px;
+        }
+        
+        .address-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 1rem;
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .address-input:focus {
+            outline: none;
+            border-color: #25D366;
+            box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.2);
+        }
+        
+        .address-required {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -119,8 +185,6 @@
                     <img src="images/ss.png" alt="شعار مطعم ومطبخ العائلة" class="logo-img">
                     <div>
                         <h1>مطعم ومطبخ العائلة</h1>
-                      
-                      
                     </div>
                 </div>
                 <div class="header-actions">
@@ -152,10 +216,40 @@
                 <p>أضف وجبات من القائمة</p>
             </div>
         </div>
+        
+        <!-- قسم خيار التوصيل -->
+        <div class="delivery-option" id="delivery-option">
+            <div class="delivery-header" id="delivery-toggle">
+                <div class="delivery-toggle">
+                    <i class="fas fa-truck"></i>
+                    <span>إضافة خدمة التوصيل</span>
+                </div>
+                <div class="delivery-price">+5 شيكل</div>
+            </div>
+            <div class="delivery-details" id="delivery-details">
+                <p style="margin-bottom: 10px; color: #555;">يرجى كتابة عنوان التوصيل:</p>
+                <textarea 
+                    id="delivery-address" 
+                    class="address-input" 
+                    rows="3" 
+                    placeholder="أدخل العنوان الكامل للتوصيل (الشارع، المنطقة، أقرب معلم...)"
+                ></textarea>
+                <div class="address-required" id="address-required">يرجى إدخال العنوان للتوصيل</div>
+            </div>
+        </div>
+        
         <div class="cart-summary">
             <div class="cart-total">
                 <span>المجموع:</span>
                 <span id="cart-total-price">0 شيكل</span>
+            </div>
+            <div class="delivery-total" id="delivery-total" style="display: none;">
+                <span>التوصيل:</span>
+                <span id="delivery-price">5 شيكل</span>
+            </div>
+            <div class="final-total" id="final-total" style="display: none; margin: 10px 0; padding-top: 10px; border-top: 1px dashed #ddd; font-size: 1.2rem; color: var(--primary-color);">
+                <span>الإجمالي النهائي:</span>
+                <span id="final-total-price">0 شيكل</span>
             </div>
             <button id="checkout-btn" class="checkout-btn">
                 <i class="fab fa-whatsapp"></i> إتمام الطلب عبر واتساب
@@ -381,7 +475,7 @@
     </div>
 
     <!-- زر الواتساب -->
-    <a href="https://wa.me/972595707901?text=مرحباً، أريد طلب وجبة من 'مطعم ومطبخ العائلة'" class="whatsapp-btn" target="_blank">
+    <a href="https://wa.me/970595170185?text=مرحباً، أريد طلب وجبة من 'مطعم ومطبخ العائلة'" class="whatsapp-btn" target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
 
@@ -403,7 +497,7 @@
                                 <a href="https://www.facebook.com/share/14VPqVYrEho/" class="social-icon facebook" target="_blank">
                                     <i class="fab fa-facebook-f"></i>
                                 </a>
-                                <a href="https://wa.me/972595707901" class="social-icon whatsapp" target="_blank">
+                                <a href="https://wa.me/970595170185" class="social-icon whatsapp" target="_blank">
                                     <i class="fab fa-whatsapp"></i>
                                 </a>
                             </div>

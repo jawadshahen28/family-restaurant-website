@@ -301,6 +301,21 @@ header {
     color: var(--primary-color);
 }
 
+.delivery-total {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    color: #25D366;
+    font-weight: bold;
+}
+
+.final-total {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
 .checkout-btn {
     background-color: #25D366;
     color: white;
@@ -704,4 +719,74 @@ footer {
   display: flex;
   justify-content: center;
   text-align: center;
+}
+
+/* قسم خيار التوصيل */
+.delivery-option {
+    background-color: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px;
+    transition: all 0.3s ease;
+}
+
+.delivery-option.active {
+    border-color: #25D366;
+    background-color: #f0fff4;
+}
+
+.delivery-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.delivery-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.delivery-price {
+    color: #25D366;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.delivery-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.delivery-details.show {
+    max-height: 200px;
+}
+
+.address-input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-top: 10px;
+    font-size: 1rem;
+    font-family: 'Cairo', sans-serif;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.address-input:focus {
+    outline: none;
+    border-color: #25D366;
+    box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.2);
+}
+
+.address-required {
+    color: #ff6b6b;
+    font-size: 0.9rem;
+    margin-top: 5px;
+    display: none;
 }
